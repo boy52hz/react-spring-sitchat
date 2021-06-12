@@ -3,28 +3,31 @@ package com.sitchat.server.models;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document("accounts")
 public class User {
+
     @Id
-    private int id;
-    @Field(name = "username")
+    private String _id;
     @Indexed(unique = true)
     private String username;
-    @Field(name = "password")
     private String password;
-    @Field(name = "email")
     private String email;
+    private Integer studentId;
+    private String firstName;
+    private String lastName;
 
-    public User(String username, String password, String email) {
+    public User(String username, String password, String email, Integer studentId, String firstName, String lastName) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.studentId = studentId;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
-    public int getId() {
-        return id;
+    public String get_id() {
+        return _id;
     }
 
     public String getUsername() {
@@ -51,13 +54,40 @@ public class User {
         this.email = email;
     }
 
+    public Integer getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(int studentId) {
+        this.studentId = studentId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Account{");
-        sb.append("username='").append(username).append('\'');
-        sb.append(", password='").append(password).append('\'');
-        sb.append(", email='").append(email).append('\'');
-        sb.append('}');
-        return sb.toString();
+        String sb = "User{" + "id='" + _id + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", studentId=" + studentId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+        return sb;
     }
 }
