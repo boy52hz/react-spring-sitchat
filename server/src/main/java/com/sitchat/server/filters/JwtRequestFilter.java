@@ -1,6 +1,6 @@
 package com.sitchat.server.filters;
 
-import com.sitchat.server.services.AuthDetailsService;
+import com.sitchat.server.services.imp.UserDetailsServiceImp;
 import com.sitchat.server.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,7 +19,7 @@ import java.io.IOException;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
     @Autowired
-    private AuthDetailsService authDetailsService;
+    private UserDetailsServiceImp userDetailsServiceImp;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -37,7 +37,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails authDetails = authDetailsService.loadUserByUsername(username);
+            UserDetails authDetails = userDetailsServiceImp.loadUserByUsername(username);
             if (jwtUtil.validateToken(jwt, authDetails)) {
                 UsernamePasswordAuthenticationToken userPassAuthToken = new UsernamePasswordAuthenticationToken(
                         authDetails, null, authDetails.getAuthorities());
