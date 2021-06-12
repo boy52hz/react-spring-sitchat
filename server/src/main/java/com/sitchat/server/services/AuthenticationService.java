@@ -26,9 +26,8 @@ public class AuthenticationService {
          userRepository.insert(user);
     }
 
-    public User getAccountByUsername(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException(
-                String.format("Cannot find account by username %s", username)));
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     public List<User> getAll() {

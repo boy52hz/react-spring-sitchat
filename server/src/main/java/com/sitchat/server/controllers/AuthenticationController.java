@@ -4,8 +4,8 @@ import com.mongodb.MongoWriteException;
 import com.sitchat.server.models.AuthenticationRequest;
 import com.sitchat.server.models.AuthenticationRespond;
 import com.sitchat.server.models.User;
-import com.sitchat.server.services.imp.UserDetailsServiceImp;
 import com.sitchat.server.services.AuthenticationService;
+import com.sitchat.server.services.imp.UserDetailsServiceImp;
 import com.sitchat.server.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,36 +31,26 @@ public class AuthenticationController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody User user) {
+    public ResponseEntity<?> register(@RequestBody User user) {
         try {
             authenticationService.register(user);
-            return ResponseEntity.status(HttpStatus.CREATED).body(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body("User " + user.getUsername() + " has been created");
         } catch (MongoWriteException ex) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Cannot register an account");
         }
     }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
         try {
-            User dbUser = authenticationService.getAccountByUsername(authenticationRequest.getUsername());
-            if (dbUser == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-
-            if (!passwordEncoder.matches(authenticationRequest.getPassword(), dbUser.getPassword())) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
             );
-
             final UserDetails authDetails = userDetailsServiceImp.loadUserByUsername(authenticationRequest.getUsername());
             final String jwt = jwtUtil.generateToken(authDetails);
             return ResponseEntity.ok(new AuthenticationRespond(jwt));
         } catch (BadCredentialsException ex) {
-            throw new Exception("Incorrect Username or Password", ex);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }

@@ -38,22 +38,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsServiceImp);
-        auth.authenticationProvider(authenticationProvider());
+        auth.userDetailsService(userDetailsServiceImp)
+                .passwordEncoder(passwordEncoder());
     }
 
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
-    }
-
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(userDetailsServiceImp);
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
-        return authenticationProvider;
     }
 
     @Bean
