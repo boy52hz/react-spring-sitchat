@@ -2,10 +2,12 @@ import React from 'react'
 
 import { StyledRegister } from './style.js'
 
-export const Register = () => {
+const Register = () => {
   return (
     <StyledRegister>
       RegisterPage
     </StyledRegister>
   )
 }
+
+export default Register

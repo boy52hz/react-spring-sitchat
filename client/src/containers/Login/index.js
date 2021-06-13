@@ -3,7 +3,7 @@ import React from 'react'
 import { StyledLogin, InputGroup } from './style.js'
 import Input  from '../../components/Input'
 
-export const Login = () => {
+const Login = () => {
   return (
     <StyledLogin>
       <h1>SIT CHAT</h1>
@@ -14,3 +14,5 @@ export const Login = () => {
     </StyledLogin>
   )
 }
+
+export default Login
