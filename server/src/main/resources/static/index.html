@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Hello WebSocket</title>
     <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -18,7 +18,8 @@
         <div class="col-md-6">
             <form class="form-inline">
                 <div class="form-group">
-                    <label for="connect">WebSocket connection:</label>
+                    <label for="auth">Token:</label>
+                    <input type="text" id="auth" class="form-control" placeholder="Bearer abc123">
                     <button id="connect" class="btn btn-default" type="submit">Connect</button>
                     <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
                     </button>
@@ -28,8 +29,9 @@
         <div class="col-md-6">
             <form class="form-inline">
                 <div class="form-group">
-                    <label for="name">What is your name?</label>
-                    <input type="text" id="name" class="form-control" placeholder="Your name here...">
+                    <label for="name">Message:</label>
+                    <input type="text" id="name" class="form-control" placeholder="ayy...">
+
                 </div>
                 <button id="send" class="btn btn-default" type="submit">Send</button>
             </form>
