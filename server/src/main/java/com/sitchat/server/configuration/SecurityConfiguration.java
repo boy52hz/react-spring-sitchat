@@ -28,8 +28,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/authenticate").permitAll()
-                .antMatchers("/register").permitAll()
+                .antMatchers(
+                        "/authenticate",
+                    "/register",
+                    "/ws/**",
+                    "/**/*.js",
+                    "/**/*.css",
+                    "/").permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
