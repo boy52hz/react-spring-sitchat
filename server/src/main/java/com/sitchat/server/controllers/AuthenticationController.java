@@ -41,6 +41,7 @@ public class AuthenticationController {
     }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
         try {
             authenticationManager.authenticate(
@@ -48,7 +49,7 @@ public class AuthenticationController {
             );
             final UserDetails authDetails = userDetailsServiceImp.loadUserByUsername(authenticationRequest.getUsername());
             final String jwt = jwtUtil.generateToken(authDetails);
-            return ResponseEntity.ok(new AuthenticationRespond(jwt));
+            return ResponseEntity.status(HttpStatus.OK).body(new AuthenticationRespond(authDetails.getUsername(), jwt));
         } catch (BadCredentialsException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

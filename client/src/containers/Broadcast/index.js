@@ -17,6 +17,11 @@ const Broadcast = () => {
     setMessages([...messages, msg])
   }
 
+  const onConnectFailure = (err) => {
+    console.log('Cannot connect to server. please try to reconnect again.')
+    throw err
+  }
+
   return (
     <StyledBroadcast>
       <SockJsClient
@@ -24,6 +29,7 @@ const Broadcast = () => {
         topics={[ TOPIC_PATH ]}
         onConnect={ onConnected }
         onMessage={ msg => onMessageReceived(msg) }
+        onConnectFailure={ onConnectFailure }
         debug={ false }
       />
       <ul>

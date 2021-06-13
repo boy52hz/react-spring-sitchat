@@ -33,7 +33,7 @@ export const MainBody = styled.div`
   box-shadow: 0px 4px 8px 0px rgba(122,122,122,1);
 `
 
-export const FormGroup = styled.div`
+export const FormGroup = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: center;
