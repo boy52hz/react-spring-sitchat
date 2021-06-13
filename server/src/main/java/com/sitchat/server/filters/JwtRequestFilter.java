@@ -33,27 +33,21 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String username = null;
         String jwt = null;
 
-        try {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            jwt = authorizationHeader.substring(7);
+            username = jwtUtil.extractUsername(jwt);
+        }
 
-            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-                jwt = authorizationHeader.substring(7);
-                username = jwtUtil.extractUsername(jwt);
-            }
-
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails authDetails = userDetailsServiceImp.loadUserByUsername(username);
-                if (jwtUtil.validateToken(jwt, authDetails)) {
-                    UsernamePasswordAuthenticationToken userPassAuthToken = new UsernamePasswordAuthenticationToken(
-                            authDetails, null, authDetails.getAuthorities());
-                    userPassAuthToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(userPassAuthToken);
-                }
-            }
-        } catch (JwtException ex) {
-            if (!request.getServletPath().equals("/authenticate")) {
-                throw ex;
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails authDetails = userDetailsServiceImp.loadUserByUsername(username);
+            if (jwtUtil.validateToken(jwt, authDetails)) {
+                UsernamePasswordAuthenticationToken userPassAuthToken = new UsernamePasswordAuthenticationToken(
+                        authDetails, null, authDetails.getAuthorities());
+                userPassAuthToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(userPassAuthToken);
             }
         }
+
         filterChain.doFilter(request, response);
     }
 }

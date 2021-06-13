@@ -15,7 +15,9 @@ function setConnected(connected) {
 function connect() {
     var socket = new SockJS('/ws');
     stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
+    stompClient.connect({
+        Authorization: $("#auth").val()
+    }, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/message/main', function (greeting) {
