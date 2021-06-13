@@ -87,8 +87,6 @@ const AuthService = {
         })
         .then(res => res.json())
         .then((data) => {
-          console.log(data.jwt)
-          console.log(data.username)
           this._token(data.jwt)
           this._username(data.username)
 
