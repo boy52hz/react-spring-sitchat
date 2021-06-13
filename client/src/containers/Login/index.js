@@ -1,11 +1,16 @@
 import React from 'react'
 
-import { StyledLogin } from './style.js'
+import { StyledLogin, InputGroup } from './style.js'
+import Input  from '../../components/Input'
 
 export const Login = () => {
   return (
     <StyledLogin>
-      LoginPage
+      <h1>SIT CHAT</h1>
+      <InputGroup>
+        <Input type='text' placeholder='Username'/>
+        <Input type='password' placeholder='Password'/>
+      </InputGroup>
     </StyledLogin>
   )
 }
