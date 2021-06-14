@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, Fragment} from 'react'
 import SockJsClient from 'react-stomp'
 import { toast } from 'react-toastify'
+import moment from 'moment'
 
 import { useAuthState  } from '../../providers/authProvider'
 import { StyledBroadcast, MainBody, MainBox, MainHeader, FormGroup } from './style'
@@ -23,6 +24,8 @@ const Broadcast = () => {
       onLoadChat()
     }
   }, [onLoadChat, isChatLoaded])
+
+  const isMe = (msg) => (msg.from.split(' ')[0] === userData.firstName)
 
   const onConnected = () => {
     toast.info('You are now connected to chat session.', {
@@ -51,7 +54,8 @@ const Broadcast = () => {
     client.current.sendMessage('/app/message/main', JSON.stringify({
       from: userData.firstName + ' ' + userData.lastName,
       to: 'main',
-      content: clientMsg
+      content: clientMsg,
+      dateTime: new Date().getTime().toString()
     }))
     setClientMsg('')
   }
@@ -75,9 +79,10 @@ const Broadcast = () => {
             { chatHistory.map((msg, index) => (
               <li key={ index }>
                 <div>
-                  <h4>{ msg.from }</h4>
+                  <h4>{ msg.from } { isMe(msg) ? '(Me)' : '' }:</h4>
                   <p>{ msg.content }</p>
                 </div>
+                <p style={{ textAlign: 'right', fontSize: '14px' }}>{ moment(parseInt(msg.dateTime)).fromNow() }</p>
               </li>
             )) }
           </ul>
