@@ -12,17 +12,11 @@ export const StyledBroadcast = styled.div`
     padding: 15px;
     margin: 0;
     border: 1px solid rgb(180, 180, 180);
+    background: rgba(80, 160, 240, 0.1);
     height: 100%;
     overflow-y: scroll;
     width: 50vw;
     height: 50vh;
-  }
-
-  li {
-    height: 80px;
-    height: auto;
-    width: 100%;
-    padding: 1em;
   }
 
   p {
@@ -33,6 +27,22 @@ export const StyledBroadcast = styled.div`
   h1 {
     font-weight: 300;
   }
+`
+
+export const CustomLi = styled.li`
+  height: 80px;
+  height: auto;
+  width: 100%;
+  padding: 1em;
+  text-align: ${ props => props.isMe ? 'right' : 'left' };
+`
+
+export const ChatBox = styled.div`
+  padding: 1em;
+  border-radius: 10px;
+  background: ${ props => props.isMe ? 'var(--primary-color)': 'rgba(200, 200, 200)' };
+  color: ${ props => props.isMe ? 'white' : '' };
+  text-align: ${ props => props.isMe ? 'right' : 'left' };
 `
 
 export const MainBox = styled.div`

@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import moment from 'moment'
 
 import { useAuthDispatch, useAuthState  } from '../../providers/authProvider'
-import { StyledBroadcast, MainBody, MainBox, MainHeader, FormGroup } from './style'
+import { StyledBroadcast, MainBody, MainBox, MainHeader, FormGroup, CustomLi, ChatBox } from './style'
 import TextField from '../../components/TextField'
 import Button from '../../components/Button'
 import { useChatDispatch, useChatState } from '../../providers/chatProvider'
@@ -53,6 +53,7 @@ const Broadcast = () => {
 
   const onSubmit = (e) => {
     e.preventDefault()
+    if (!clientMsg) return
     client.current.sendMessage('/app/message/main', JSON.stringify({
       from: fullName,
       to: 'main',
@@ -82,13 +83,13 @@ const Broadcast = () => {
         <MainBody>
           <ul>
             { chatHistory.map((msg, index) => (
-              <li key={ index }>
-                <div>
-                  <h4>{ msg.from } { isMe(msg) ? '(Me)' : '' }:</h4>
+              <CustomLi>
+                <ChatBox isMe={ isMe(msg) }>
+                  { !isMe(msg) ? <h4>({ userData.studentId }) { msg.from }:</h4> : '' }
                   <p>{ msg.content }</p>
-                </div>
-                <p style={{ textAlign: 'right', fontSize: '14px' }}>{ moment(parseInt(msg.dateTime)).fromNow() }</p>
-              </li>
+                  <p style={{ textAlign: (isMe(msg) ? 'left' : 'right'), fontSize: '14px' }}>{ moment(parseInt(msg.dateTime)).fromNow() }</p>
+                </ChatBox>
+              </CustomLi>
             )) }
           </ul>
           <FormGroup onSubmit={ onSubmit }>
