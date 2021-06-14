@@ -35,4 +35,11 @@ public class ChatMessage {
         this.content = content;
     }
 
+    @Override
+    public String toString() {
+        return "ChatMessage{" + "from='" + from + '\'' +
+                ", to='" + to + '\'' +
+                ", content='" + content + '\'' +
+                '}';
+    }
 }
