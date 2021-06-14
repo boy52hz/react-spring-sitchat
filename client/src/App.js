@@ -37,7 +37,7 @@ const App = () => {
           <Broadcast/>
         </PrivateRoute>
         <Route exact path='/login'>
-          { isLoggedIn ? <Redirect from='/login' to='/'/> : <Login/> }
+          { isLoggedIn ? <Redirect to='/'/> : <Login/> }
         </Route>
         <Route exact path='/register'>
          { isLoggedIn ? <Redirect to='/'/> : <Register/> }

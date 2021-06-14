@@ -20,6 +20,14 @@ export const StyledBroadcast = styled.div`
 
   li {
     height: 80px;
+    height: auto;
+    width: 100%;
+    padding: 1em;
+  }
+
+  p {
+    font-size: 22px;
+    padding: 5px 0;
   }
 
   h1 {
