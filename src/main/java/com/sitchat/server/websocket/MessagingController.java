@@ -24,8 +24,7 @@ public class MessagingController {
     }
 
     @MessageMapping("/message/{to}")
-    public void sendMessage(@DestinationVariable String to, ChatMessage chatMessage, Principal principal) {
-        chatMessage.setFrom(principal.getName());
+    public void sendMessage(@DestinationVariable String to, ChatMessage chatMessage) {
         chatMessage.setTo(to);
         rooms.addMessage(to, chatMessage);
         simpMessagingTemplate.convertAndSend(WS_TOPIC_MESSAGE + "/" + to, chatMessage);
