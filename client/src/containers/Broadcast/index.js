@@ -1,4 +1,4 @@
-import React, { useState, useRef} from 'react'
+import React, { useState, useRef, Fragment} from 'react'
 import SockJsClient from 'react-stomp'
 import { toast } from 'react-toastify'
 
@@ -14,7 +14,7 @@ const Broadcast = () => {
   const client = useRef()
   const [clientMsg, setClientMsg] = useState('')
   const [messages, setMessages] = useState([])
-  const { username, token } = useAuthState()
+  const { userData, token } = useAuthState()
 
   const onConnected = () => {
     toast.info('You are now connected to chat session.', {
@@ -48,7 +48,7 @@ const Broadcast = () => {
     setClientMsg('')
   }
 
-  return (
+  return !userData ? <Fragment/> : (
     <StyledBroadcast>
       <SockJsClient
         headers={{ Authorization: `Bearer ${token}` }}
@@ -61,7 +61,7 @@ const Broadcast = () => {
         ref={ client }
       />
       <MainBox>
-        <MainHeader>SIT CHAT - { username }</MainHeader>
+        <MainHeader>SIT CHAT - { userData.username }</MainHeader>
         <MainBody>
           <ul>
             { messages.map((msg, index) => (

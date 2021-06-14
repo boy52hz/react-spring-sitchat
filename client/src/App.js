@@ -13,8 +13,8 @@ import Register from './containers/Register'
 import 'react-toastify/dist/ReactToastify.css'
 
 const App = () => {
-  const { onClearErrors } = useAuthDispatch()
-  const { error, isLoggedIn } = useAuthState()
+  const { onClearErrors, onLoadUserData } = useAuthDispatch()
+  const { error, isLoggedIn, userData } = useAuthState()
 
   const history = useHistory();
 
@@ -23,8 +23,12 @@ const App = () => {
       error && onClearErrors()
     })
 
+    if (isLoggedIn && !userData) {
+      onLoadUserData()
+    }
+
     return () => unlisten()
-  },[history, error, onClearErrors])
+  },[history, error, onClearErrors, isLoggedIn, userData, onLoadUserData])
 
   return (
     <StyledApp>
