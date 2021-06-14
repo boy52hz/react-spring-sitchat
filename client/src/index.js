@@ -6,13 +6,16 @@ import reportWebVitals from './reportWebVitals';
 
 import { BrowserRouter as Router } from 'react-router-dom'
 import { AuthProvider } from './providers/authProvider'
+import { ChatProvider } from './providers/chatProvider'
 
 ReactDOM.render(
   <React.StrictMode>
     <AuthProvider>
-      <Router>
-        <App />
-      </Router>
+      <ChatProvider>
+        <Router>
+          <App />
+        </Router>
+      </ChatProvider>
     </AuthProvider>
   </React.StrictMode>,
   document.getElementById('root')
