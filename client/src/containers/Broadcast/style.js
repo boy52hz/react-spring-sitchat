@@ -41,7 +41,7 @@ export const MainHeader = styled.h1`
   padding: 1em;
 `
 
-export const InputGroup = styled.div`
+export const FormGroup = styled.form`
   display: flex;
   margin: 1em 0;
 `
@@ -57,6 +57,7 @@ export const MainBody = styled.div`
     width: 100%;
     resize: none;
     font-size: 16px;
+    padding: 10px;
   }
 
   button {

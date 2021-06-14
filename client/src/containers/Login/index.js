@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import React from 'react'
+import { Link } from 'react-router-dom'
 
 import { StyledLogin, FormGroup, MainBody } from './style.js'
 import Input  from '../../components/Input'
@@ -9,19 +9,12 @@ import { useAuthState, useAuthDispatch } from '../../providers/authProvider'
 
 const Login = () => {
   const { onUpdate, onLogin } = useAuthDispatch()
-  const { username, password, isLoggedIn } = useAuthState()
-  const history = useHistory()
+  const { username, password } = useAuthState()
 
   const onSubmit = (e) => {
     e.preventDefault()
     onLogin()
   }
-
-  useEffect(() => {
-    if (isLoggedIn) {
-			history.push('/')
-		}
-  }, [isLoggedIn, history])
 
   return (
     <StyledLogin>
