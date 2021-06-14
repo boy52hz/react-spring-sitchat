@@ -35,7 +35,9 @@ const App = () => {
         <Route exact path='/login'>
           { isLoggedIn ? <Redirect to='/'/> : <Login/> }
         </Route>
-        <Route path='/register' component={ Register }/>
+        <Route exact path='/register'>
+         { isLoggedIn ? <Redirect to='/'/> : <Register/> }
+        </Route>
       </Switch>
       <ToastContainer />
     </StyledApp>

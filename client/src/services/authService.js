@@ -38,15 +38,18 @@ const AuthService = {
     return res
   },
 
-  register(username, email, password) {
+  register(username, email, password, studentId, firstName, lastName) {
     return Promise.resolve().then(() => {
       this._validateStringField('username', username)
       this._validateEmail(email)
       this._validateStringField('password', password)
+      this._validateStringField('studentId', studentId)
+      this._validateStringField('firstName', firstName)
+      this._validateStringField('lastName', lastName)
 
       return fetch(`${this._url}/register`, {
         method: 'POST',
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify({ username, email, password, studentId, firstName, lastName }),
         headers: {
           'content-type': 'application/json'
         }
