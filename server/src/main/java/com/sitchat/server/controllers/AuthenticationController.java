@@ -1,20 +1,24 @@
 package com.sitchat.server.controllers;
 
 import com.mongodb.MongoWriteException;
+import com.sitchat.server.models.User;
 import com.sitchat.server.models.dto.authentication.AuthenticationRequest;
 import com.sitchat.server.models.dto.authentication.AuthenticationRespond;
-import com.sitchat.server.models.User;
 import com.sitchat.server.services.AuthenticationService;
 import com.sitchat.server.services.imp.UserDetailsServiceImp;
 import com.sitchat.server.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class AuthenticationController {
@@ -29,11 +33,15 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
+        Map<String, String> response = new HashMap<>();
         try {
             authenticationService.register(user);
-            return ResponseEntity.status(HttpStatus.CREATED).body("User " + user.getUsername() + " has been created");
+            response.put("message", "User " + user.getUsername() + " has been created");
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+
         } catch (MongoWriteException ex) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Cannot register an account");
+            response.put("message", "Failed to register an account");
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
     }
 
