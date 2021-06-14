@@ -9,7 +9,7 @@ import TextField from '../../components/TextField'
 import Button from '../../components/Button'
 import { useChatDispatch, useChatState } from '../../providers/chatProvider'
 
-const SOCKET_URL = 'http://localhost:8080/ws'
+const SOCKET_URL = `${window.location.origin}/ws`
 const TOPIC_PATH = '/topic/message/main'
 
 const Broadcast = () => {
