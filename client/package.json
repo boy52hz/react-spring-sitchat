@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^12.1.10",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "prop-types": "^15.7.2",
     "re": "^0.1.4",
     "react": "^17.0.2",

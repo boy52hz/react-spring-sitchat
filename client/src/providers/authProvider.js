@@ -9,6 +9,8 @@ const EVENT_TYPES = {
   LOGIN_SUCCESS: 'login_success',
   LOGIN_ERROR: 'login_error',
   LOGOUT: 'logout',
+  USER_LOADED: 'user_loaded',
+  USER_LOAD_FAILED: 'user_load_failed',
   CLEAR_ERRORS: 'clear_errors',
   ERROR: 'error'
 }
@@ -26,6 +28,12 @@ const EVENTS = {
     return {
       ...state,
       isLoggedIn: true
+    }
+  },
+  [EVENT_TYPES.USER_LOADED]: (state, event) => {
+    return {
+      ...state,
+      userData: event.payload.userData
     }
   },
   [EVENT_TYPES.LOGIN_ERROR]: (state, event) => {
@@ -51,6 +59,13 @@ const EVENTS = {
         error
     }
   },
+  [EVENT_TYPES.USER_LOAD_FAILED]: (state, event) => {
+    const { error } = event.payload
+    return {
+        ...state,
+        error
+    }
+  },
   [EVENT_TYPES.CLEAR_ERRORS]: state => {
     return {
         ...state,
@@ -65,6 +80,7 @@ const INITIAL_STATE = {
   username: '',
   email: '',
   password: '',
+  userData: undefined,
   error: ''
 }
 
@@ -119,11 +135,26 @@ const AuthProvider = ({ children }) => {
       dispatch({ type: EVENT_TYPES.CLEAR_ERRORS })
     }
 
+    const handleUserDataLoading = () => {
+      AuthService.retrieveUser().then(userData => {
+        dispatch({ 
+          type: EVENT_TYPES.USER_LOADED,
+          payload: { userData }
+        })
+      }).catch(({ message }) => {
+        dispatch({ 
+          type: EVENT_TYPES.USER_LOAD_FAILED,
+          payload: { error: message }
+         })
+      })
+    }
+
     const events = {
       onUpdate: handleUpdate,
       onRegister: handleRegister,
       onLogin: handleLogin,
       onLogout: handleLogout,
+      onLoadUserData: handleUserDataLoading,
       onClearErrors: handleClearErrors
     }
 

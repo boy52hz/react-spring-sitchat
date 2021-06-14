@@ -9,7 +9,7 @@ export const StyledBroadcast = styled.div`
 
   ul {
     list-style: none;
-    padding: 10px 8px;
+    padding: 15px;
     margin: 0;
     border: 1px solid rgb(180, 180, 180);
     height: 100%;

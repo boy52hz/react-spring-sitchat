@@ -90,7 +90,6 @@ const AuthService = {
         })
         .then(res => res.json())
         .then((data) => {
-          console.log(data.jwt)
           this._token(data.jwt)
           this._username(data.username)
 
@@ -125,7 +124,7 @@ const AuthService = {
       })
     })
     .then(res => res.json())
-    .then(({ user }) => user)
+    .then(userData => userData)
   }
 }
 
