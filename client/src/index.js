@@ -1,12 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
+import App from './App'
+import reportWebVitals from './reportWebVitals'
 
 import { BrowserRouter as Router } from 'react-router-dom'
 import { AuthProvider } from './providers/authProvider'
 import { ChatProvider } from './providers/chatProvider'
+
+console.log(process.env)
 
 ReactDOM.render(
   <React.StrictMode>

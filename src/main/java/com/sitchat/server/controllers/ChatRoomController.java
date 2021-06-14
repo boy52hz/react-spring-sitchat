@@ -4,6 +4,7 @@ import com.sitchat.server.websocket.ChatMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,7 @@ public class ChatRoomController {
     }
 
     @GetMapping("/history/{room}")
+    @CrossOrigin
     public ResponseEntity<?> getHistory(@PathVariable String room) {
         Deque<ChatMessage> messages = rooms.getMessages(room);
         System.out.println(rooms.getMessages(room));

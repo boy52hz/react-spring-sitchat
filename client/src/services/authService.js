@@ -1,7 +1,7 @@
 import validateEmail from '../utils/validateEmail'
 
 const AuthService = {
-  _url: '',
+  _url: process.env.REACT_APP_API_URL || '',
 
   _validateStringField(field, value) {
     if (typeof value !== 'string' || !value.trim().length)

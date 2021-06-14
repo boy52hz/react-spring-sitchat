@@ -1,5 +1,5 @@
 const ChatService = {
-  _url: '',
+  _url: process.env.REACT_APP_API_URL,
   loadChat(room, token) {
     return fetch(`${this._url}/history/${room}`, {
       method: 'GET',

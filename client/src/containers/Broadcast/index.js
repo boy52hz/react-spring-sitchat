@@ -9,7 +9,7 @@ import TextField from '../../components/TextField'
 import Button from '../../components/Button'
 import { useChatDispatch, useChatState } from '../../providers/chatProvider'
 
-const SOCKET_URL = `${window.location.origin}/ws`
+const SOCKET_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:8080/ws' : `${window.location.origin}/ws`
 const TOPIC_PATH = '/topic/message/main'
 
 const Broadcast = () => {
@@ -84,7 +84,7 @@ const Broadcast = () => {
           <ul>
             { chatHistory.map((msg, index) => (
               <CustomLi>
-                <ChatBox isMe={ isMe(msg) }>
+                <ChatBox key={index} isMe={ isMe(msg) }>
                   { !isMe(msg) ? <h4>({ userData.studentId }) { msg.from }:</h4> : '' }
                   <p>{ msg.content }</p>
                   <p style={{ textAlign: (isMe(msg) ? 'left' : 'right'), fontSize: '14px' }}>{ moment(parseInt(msg.dateTime)).fromNow() }</p>
