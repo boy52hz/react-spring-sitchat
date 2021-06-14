@@ -9,7 +9,7 @@ const ButtonStyle = styled.button`
 	border: none;
 	background-color: var(--primary-color);
 	color: white;
-	transition: all .4s ease-out;
+	transition: all .3s ease-out;
 
 	:hover {
 		background-color: var(--primary-color-hover);

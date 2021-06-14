@@ -3,7 +3,7 @@ import SockJsClient from 'react-stomp'
 import { toast } from 'react-toastify'
 import moment from 'moment'
 
-import { useAuthState  } from '../../providers/authProvider'
+import { useAuthDispatch, useAuthState  } from '../../providers/authProvider'
 import { StyledBroadcast, MainBody, MainBox, MainHeader, FormGroup } from './style'
 import TextField from '../../components/TextField'
 import Button from '../../components/Button'
@@ -17,6 +17,7 @@ const Broadcast = () => {
   const [clientMsg, setClientMsg] = useState('')
   const { chatHistory, isChatLoaded } = useChatState()
   const { onLoadChat } = useChatDispatch()
+  const { onLogout } = useAuthDispatch()
   const { userData, token } = useAuthState()
 
   useEffect(() => {
@@ -26,6 +27,7 @@ const Broadcast = () => {
   }, [onLoadChat, isChatLoaded])
 
   const isMe = (msg) => (msg.from.split(' ')[0] === userData.firstName)
+  const fullName = (userData ? userData.firstName + ' ' + userData.lastName : '')
 
   const onConnected = () => {
     toast.info('You are now connected to chat session.', {
@@ -52,7 +54,7 @@ const Broadcast = () => {
   const onSubmit = (e) => {
     e.preventDefault()
     client.current.sendMessage('/app/message/main', JSON.stringify({
-      from: userData.firstName + ' ' + userData.lastName,
+      from: fullName,
       to: 'main',
       content: clientMsg,
       dateTime: new Date().getTime().toString()
@@ -73,7 +75,10 @@ const Broadcast = () => {
         ref={ client }
       />
       <MainBox>
-        <MainHeader>SIT CHAT - { userData.username }</MainHeader>
+        <MainHeader>
+          <div style={{ flex: '10' }}>SIT CHAT - { fullName }</div>
+          <Button style={{ flex: '1' }} onClick={ onLogout }>Logout</Button>
+        </MainHeader>
         <MainBody>
           <ul>
             { chatHistory.map((msg, index) => (

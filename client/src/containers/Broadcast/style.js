@@ -44,9 +44,20 @@ export const MainBox = styled.div`
 `
 
 export const MainHeader = styled.h1`
+  display: flex;
+  align-items: center;
   background: var(--primary-color);
   color: white;
   padding: 1em;
+
+  button {
+    background: darkred;
+    font-size: 16px;
+  }
+
+  button:hover {
+    background: rgb(180, 0, 0);
+  }
 `
 
 export const FormGroup = styled.form`
