@@ -60,15 +60,15 @@ const EVENTS = {
 }
 
 const INITIAL_STATE = {
-    isLoggedIn: AuthService.isLoggedIn(),
-    name: '',
-    email: '',
-    password: '',
-    error: ''
+  isLoggedIn: AuthService.isLoggedIn(),
+  name: '',
+  email: '',
+  password: '',
+  error: ''
 }
 
 const AuthReducer = (state, event) => {
-    return EVENTS[event.type](state, event) || state
+  return EVENTS[event.type](state, event) || state
 }
 
 const AuthProvider = ({ children }) => {

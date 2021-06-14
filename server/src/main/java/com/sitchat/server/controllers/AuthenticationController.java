@@ -1,8 +1,8 @@
 package com.sitchat.server.controllers;
 
 import com.mongodb.MongoWriteException;
-import com.sitchat.server.models.AuthenticationRequest;
-import com.sitchat.server.models.AuthenticationRespond;
+import com.sitchat.server.models.dto.authentication.AuthenticationRequest;
+import com.sitchat.server.models.dto.authentication.AuthenticationRespond;
 import com.sitchat.server.models.User;
 import com.sitchat.server.services.AuthenticationService;
 import com.sitchat.server.services.imp.UserDetailsServiceImp;
@@ -14,7 +14,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,8 +22,6 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
     @Autowired
     private UserDetailsServiceImp userDetailsServiceImp;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
     @Autowired
     private AuthenticationService authenticationService;
     @Autowired

@@ -25,7 +25,7 @@ public class AuthenticationService {
         userRepository.insert(user);
     }
 
-    public User getAccountByUsername(String username) {
+    public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
