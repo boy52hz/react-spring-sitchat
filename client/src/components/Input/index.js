@@ -5,7 +5,7 @@ import { InputStyle, InvalidMessage } from './style.js'
 const Input = ({invalidMsg, ...props}) => {
   return (
 		<Fragment>
-			<InputStyle {...props} invalid={ invalidMsg !== '' }/>
+			<InputStyle {...props} ref={props.innerRef} invalid={ invalidMsg !== '' }/>
 			<InvalidMessage>
 				{ invalidMsg }
 			</InvalidMessage>

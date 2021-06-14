@@ -98,11 +98,11 @@ const AuthProvider = ({ children }) => {
       dispatch({ type: EVENT_TYPES.UPDATE, payload: { name, value } })
     }
 
-    const handleRegister = () => {
+    const handleRegister = (studentId, firstName, lastName) => {
       const { username, email, password } = state
 
-      AuthService.register(username, email, password)
-        .then(handleLogin)
+      AuthService.register(username, email, password, studentId, firstName, lastName)
+        .then(() => handleLogin())
         .catch(({ message }) => {
           dispatch({
             type: EVENT_TYPES.ERROR,
