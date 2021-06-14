@@ -83,8 +83,8 @@ const Broadcast = () => {
         <MainBody>
           <ul>
             { chatHistory.map((msg, index) => (
-              <CustomLi>
-                <ChatBox key={index} isMe={ isMe(msg) }>
+              <CustomLi key={ index.toString() } >
+                <ChatBox isMe={ isMe(msg) }>
                   { !isMe(msg) ? <h4>({ userData.studentId }) { msg.from }:</h4> : '' }
                   <p>{ msg.content }</p>
                   <p style={{ textAlign: (isMe(msg) ? 'left' : 'right'), fontSize: '14px' }}>{ moment(parseInt(msg.dateTime)).fromNow() }</p>

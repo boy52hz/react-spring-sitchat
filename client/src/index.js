@@ -8,8 +8,6 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { AuthProvider } from './providers/authProvider'
 import { ChatProvider } from './providers/chatProvider'
 
-console.log(process.env)
-
 ReactDOM.render(
   <React.StrictMode>
     <AuthProvider>
