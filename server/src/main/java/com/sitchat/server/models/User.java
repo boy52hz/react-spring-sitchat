@@ -13,11 +13,11 @@ public class User {
     private String username;
     private String password;
     private String email;
-    private Integer studentId;
+    private String studentId;
     private String firstName;
     private String lastName;
 
-    public User(String username, String password, String email, Integer studentId, String firstName, String lastName) {
+    public User(String username, String password, String email, String studentId, String firstName, String lastName) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -54,11 +54,11 @@ public class User {
         this.email = email;
     }
 
-    public Integer getStudentId() {
+    public String getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(int studentId) {
+    public void setStudentId(String studentId) {
         this.studentId = studentId;
     }
 

@@ -5,7 +5,7 @@ import com.sitchat.server.models.User;
 public class UserDto {
     private String username;
     private String email;
-    private Integer studentId;
+    private String studentId;
     private String firstName;
     private String lastName;
 
@@ -17,7 +17,7 @@ public class UserDto {
         this.lastName = user.getLastName();
     }
 
-    public UserDto(String username, String email, Integer studentId, String firstName, String lastName) {
+    public UserDto(String username, String email, String studentId, String firstName, String lastName) {
         this.username = username;
         this.email = email;
         this.studentId = studentId;
@@ -41,11 +41,11 @@ public class UserDto {
         this.email = email;
     }
 
-    public Integer getStudentId() {
+    public String getStudentId() {
         return studentId;
     }
 
-    public void setStudentId(Integer studentId) {
+    public void setStudentId(String studentId) {
         this.studentId = studentId;
     }
 
