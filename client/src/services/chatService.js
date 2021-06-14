@@ -1,5 +1,5 @@
 const ChatService = {
-  _url: 'http://localhost:8080',
+  _url: '',
   loadChat(room, token) {
     return fetch(`${this._url}/history/${room}`, {
       method: 'GET',

@@ -1,7 +1,7 @@
 import validateEmail from '../utils/validateEmail'
 
 const AuthService = {
-  _url: 'http://localhost:8080',
+  _url: '',
 
   _validateStringField(field, value) {
     if (typeof value !== 'string' || !value.trim().length)

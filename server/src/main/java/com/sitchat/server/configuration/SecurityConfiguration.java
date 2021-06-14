@@ -25,7 +25,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http.cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/history/**").authenticated()
                 .antMatchers(
@@ -34,6 +34,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
                         "/ws/**",
                         "/**/*.js",
                         "/**/*.css",
+                        "/**/*.json",
+                        "/**/*.ico",
                         "/").permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement()
