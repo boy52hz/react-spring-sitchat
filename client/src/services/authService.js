@@ -38,15 +38,15 @@ const AuthService = {
     return res
   },
 
-  register(name, email, password) {
+  register(username, email, password) {
     return Promise.resolve().then(() => {
-      this._validateStringField('name', name)
+      this._validateStringField('username', username)
       this._validateEmail(email)
       this._validateStringField('password', password)
 
       return fetch(`${this._url}/register`, {
         method: 'POST',
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ username, email, password }),
         headers: {
           'content-type': 'application/json'
         }
@@ -87,6 +87,7 @@ const AuthService = {
         })
         .then(res => res.json())
         .then((data) => {
+          console.log(data.jwt)
           this._token(data.jwt)
           this._username(data.username)
 

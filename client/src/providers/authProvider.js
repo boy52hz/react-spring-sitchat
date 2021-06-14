@@ -61,7 +61,8 @@ const EVENTS = {
 
 const INITIAL_STATE = {
   isLoggedIn: AuthService.isLoggedIn(),
-  name: '',
+  token: AuthService._token(),
+  username: '',
   email: '',
   password: '',
   error: ''
@@ -82,9 +83,9 @@ const AuthProvider = ({ children }) => {
     }
 
     const handleRegister = () => {
-      const { name, email, password } = state
+      const { username, email, password } = state
 
-      AuthService.register(name, email, password)
+      AuthService.register(username, email, password)
         .then(handleLogin)
         .catch(({ message }) => {
           dispatch({
