@@ -16,7 +16,7 @@ const Broadcast = () => {
   const client = useRef()
   const [clientMsg, setClientMsg] = useState('')
   const { chatHistory, isChatLoaded } = useChatState()
-  const { onLoadChat } = useChatDispatch()
+  const { onLoadChat, onMessageReceive } = useChatDispatch()
   const { onLogout } = useAuthDispatch()
   const { userData, token } = useAuthState()
 
@@ -35,10 +35,6 @@ const Broadcast = () => {
       autoClose: 5000,
       hideProgressBar: true,
     })
-  }
-
-  const onMessageReceived = (msg) => {
-    onLoadChat()
   }
 
   const onConnectFailure = (err) => {
@@ -70,7 +66,7 @@ const Broadcast = () => {
         url={ SOCKET_URL }
         topics={[ TOPIC_PATH ]}
         onConnect={ onConnected }
-        onMessage={ msg => onMessageReceived(msg) }
+        onMessage={ msg => onMessageReceive(msg) }
         onConnectFailure={ onConnectFailure }
         debug={ false }
         ref={ client }

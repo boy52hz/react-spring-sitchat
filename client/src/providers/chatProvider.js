@@ -6,7 +6,8 @@ const ChatDispatch = createContext()
 
 const EVENT_TYPES = {
   CHAT_LOADED: 'chat_loaded',
-  CHAT_LOAD_FAILED: 'chat_load_failed'
+  CHAT_LOAD_FAILED: 'chat_load_failed',
+  MESSAGE_RECEIVED: 'message_received'
 }
 
 const INITIAL_STATE = {
@@ -26,8 +27,14 @@ const EVENTS = {
   [EVENT_TYPES.CHAT_LOAD_FAILED]: (state, event) => {
     const { error } = event.payload
     return {
-        ...state,
-        error
+      ...state,
+      error
+    }
+  },
+  [EVENT_TYPES.MESSAGE_RECEIVED]: (state, event) => {
+    return {
+      ...state,
+      chatHistory: [event.payload, ...state.chatHistory]
     }
   }
 }
@@ -53,8 +60,16 @@ const ChatProvider = ({ children }) => {
     })
   }
 
+  const handleMessageReceiving = msg => {
+    dispatch({
+      type: EVENT_TYPES.MESSAGE_RECEIVED,
+      payload: msg
+    })
+  }
+
   const events = {
-    onLoadChat: handleChatLoading
+    onLoadChat: handleChatLoading,
+    onMessageReceive: handleMessageReceiving
   }
 
   return (
