@@ -9,7 +9,7 @@ export const StyledBroadcast = styled.div`
 
   ul {
     list-style: none;
-    padding: 15px;
+    padding: 24px;
     margin: 0;
     border: 1px solid rgb(180, 180, 180);
     background: rgba(80, 160, 240, 0.1);
@@ -17,10 +17,9 @@ export const StyledBroadcast = styled.div`
     overflow-y: scroll;
     width: 50vw;
     height: 50vh;
-  }
-
-  ul, ul li {
-    transform: scaleY(-1);
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
   }
 
   p {
@@ -34,10 +33,9 @@ export const StyledBroadcast = styled.div`
 `
 
 export const CustomLi = styled.li`
-  height: 80px;
   height: auto;
-  width: 100%;
-  padding: 1em;
+  min-width: 90%;
+  padding-top: ${props => props.newGrouping ? '2em' : '.5em'};
   text-align: ${ props => props.isMe ? 'right' : 'left' };
 `
 
