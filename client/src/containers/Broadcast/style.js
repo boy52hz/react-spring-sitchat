@@ -34,9 +34,11 @@ export const StyledBroadcast = styled.div`
 
 export const CustomLi = styled.li`
   height: auto;
-  min-width: 90%;
+  min-width: 60%;
+  max-width: 90%;
   padding-top: ${props => props.newGrouping ? '2em' : '.5em'};
   text-align: ${ props => props.isMe ? 'right' : 'left' };
+  align-self: ${props => props.isMe ? 'flex-end' : 'flex-start'};
 `
 
 export const ChatBox = styled.div`
