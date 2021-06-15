@@ -19,6 +19,10 @@ export const StyledBroadcast = styled.div`
     height: 50vh;
   }
 
+  ul, ul li {
+    transform: scaleY(-1);
+  }
+
   p {
     font-size: 22px;
     padding: 5px 0;

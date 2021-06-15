@@ -79,7 +79,7 @@ const Broadcast = () => {
         <MainBody>
           <ul>
             { chatHistory.map((msg, index) => (
-              <CustomLi key={ index.toString() } >
+              <CustomLi key={ msg.dateTime } >
                 <ChatBox isMe={ isMe(msg) }>
                   { !isMe(msg) ? <h4>({ userData.studentId }) { msg.from }:</h4> : '' }
                   <p>{ msg.content }</p>
