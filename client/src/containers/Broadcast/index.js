@@ -79,7 +79,7 @@ const Broadcast = () => {
         <MainBody>
           <ul>
             { chatHistory.map((msg, index, arr) => (
-              <CustomLi key={ msg.dateTime } isMe={ isMe(msg) } newGrouping={ index + 1 < arr.length && (msg.from !== arr[index + 1].from || (moment(parseInt(msg.dateTime)) - moment(parseInt(arr[index + 1].dateTime))) > 1000 * 10) } >
+              <CustomLi key={ msg.dateTime } isMe={ isMe(msg) } newGrouping={ index + 1 < arr.length && (moment(parseInt(msg.dateTime)) - moment(parseInt(arr[index + 1].dateTime))) > 1000 * 10 } >
                 <ChatBox isMe={ isMe(msg)} >
                   { !isMe(msg) ? <h4>({ userData.studentId }) { msg.from }:</h4> : '' }
                   <p>{ msg.content }</p>
