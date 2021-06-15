@@ -47,9 +47,15 @@ const Broadcast = () => {
     setClientMsg(message)
   }
 
+  const handleKeyPress = (e) => {
+    if ((e.which === 13 || e.charCode === 13) && !e.shiftKey) {
+      onSubmit(e);      
+    }
+  }
+
   const onSubmit = (e) => {
     e.preventDefault()
-    if (!clientMsg) return
+    if (clientMsg.trim() === '') return
     client.current.sendMessage('/app/message/main', JSON.stringify({
       from: fullName,
       to: 'main',
@@ -89,7 +95,7 @@ const Broadcast = () => {
             )) }
           </ul>
           <FormGroup onSubmit={ onSubmit }>
-            <TextField cols='60' rows='5' placeholder='Enter your message' onChange={ handleChange } value={ clientMsg }></TextField>
+            <TextField cols='60' rows='5' placeholder='Enter your message' onChange={ handleChange } value={ clientMsg } onKeyPress={ handleKeyPress }></TextField>
             <Button type='submit'>Send</Button>
           </FormGroup>
         </MainBody>
