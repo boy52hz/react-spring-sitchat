@@ -8,6 +8,8 @@ import { StyledBroadcast, MainBody, MainBox, MainHeader, FormGroup, CustomLi, Ch
 import TextField from '../../components/TextField'
 import Button from '../../components/Button'
 import { useChatDispatch, useChatState } from '../../providers/chatProvider'
+import { Redirect } from 'react-router-dom'
+import { ERROR_TYPES } from '../../types';
 
 const SOCKET_URL = `${process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : window.location.origin}/ws`
 const TOPIC_PATH = '/topic/message/main'
@@ -15,18 +17,27 @@ const TOPIC_PATH = '/topic/message/main'
 const Broadcast = () => {
   const client = useRef()
   const [clientMsg, setClientMsg] = useState('')
-  const { chatHistory, isChatLoaded } = useChatState()
+  const { chatHistory } = useChatState()
   const { onLoadChat, onMessageReceive } = useChatDispatch()
-  const { onLogout } = useAuthDispatch()
-  const { userData, token } = useAuthState()
+  const { onLogout, onLoadUserData } = useAuthDispatch()
+  const { userData, error } = useAuthState()
 
   useEffect(() => {
-    if (!isChatLoaded) {
-      onLoadChat()
+    if (!userData) {
+      onLoadUserData();
     }
-  }, [onLoadChat, isChatLoaded, token])
+    if (error === ERROR_TYPES.INVALID_TOKEN) {
+      toast.error(error, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: true,
+      })
+      onLogout();
+    }
+    onLoadChat();
+  }, [error, userData])
 
-  const isMe = (msg) => (msg.from.username === userData.username)
+  const isMe = userData ? (msg) => (msg.from.username === userData.username) : () => false;
   const getFullName = (data) => (data ? data.firstName + ' ' + data.lastName : '')
 
   const onConnected = () => {
@@ -65,7 +76,7 @@ const Broadcast = () => {
     setClientMsg('')
   }
 
-  return !userData ? <Fragment/> : (
+  return (!userData && error) ? <Redirect to={"/"}/> : (
     <StyledBroadcast>
       <SockJsClient
         headers={{ Authorization: `Bearer ${sessionStorage.getItem('token')}` }}

@@ -28,7 +28,7 @@ const App = () => {
     }
 
     return () => unlisten()
-  },[history, error, onClearErrors, isLoggedIn, userData, onLoadUserData ])
+  },[history, error, isLoggedIn, userData])
 
   return (
     <StyledApp>
