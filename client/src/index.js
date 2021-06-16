@@ -9,15 +9,13 @@ import { AuthProvider } from './providers/authProvider'
 import { ChatProvider } from './providers/chatProvider'
 
 ReactDOM.render(
-  <React.StrictMode>
-    <AuthProvider>
-      <ChatProvider>
-        <Router>
-          <App />
-        </Router>
-      </ChatProvider>
-    </AuthProvider>
-  </React.StrictMode>,
+  <AuthProvider>
+    <ChatProvider>
+      <Router>
+        <App />
+      </Router>
+    </ChatProvider>
+  </AuthProvider>,
   document.getElementById('root')
 );
 
