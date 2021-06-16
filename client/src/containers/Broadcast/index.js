@@ -26,8 +26,8 @@ const Broadcast = () => {
     }
   }, [onLoadChat, isChatLoaded, token])
 
-  const isMe = (msg) => (msg.from.split(' ')[0] === userData.firstName)
-  const fullName = (userData ? userData.firstName + ' ' + userData.lastName : '')
+  const isMe = (msg) => (msg.from.username === userData.username)
+  const getFullName = (data) => (data ? data.firstName + ' ' + data.lastName : '')
 
   const onConnected = () => {
     toast.info('You are now connected to chat session.', {
@@ -57,7 +57,7 @@ const Broadcast = () => {
     e.preventDefault()
     if (clientMsg.trim() === '') return
     client.current.sendMessage('/app/message/main', JSON.stringify({
-      from: fullName,
+      from: userData,
       to: 'main',
       content: clientMsg,
       dateTime: new Date().getTime().toString()
@@ -80,7 +80,7 @@ const Broadcast = () => {
       />
       <MainBox>
         <MainHeader>
-          <div style={{ flex: '10' }}>SIT CHAT - { fullName }</div>
+          <div style={{ flex: '10' }}>SIT CHAT - { getFullName(userData) }</div>
           <Button style={{ flex: '1' }} onClick={ onLogout }>Logout</Button>
         </MainHeader>
         <MainBody>
@@ -88,7 +88,7 @@ const Broadcast = () => {
             { chatHistory.map((msg, index, arr) => (
               <CustomLi key={ msg.dateTime } isMe={ isMe(msg) } newGrouping={ index + 1 < arr.length && (moment(parseInt(msg.dateTime)) - moment(parseInt(arr[index + 1].dateTime))) > 1000 * 10 } >
                 <ChatBox isMe={ isMe(msg)} >
-                  { !isMe(msg) ? <h4>({ userData.studentId }) { msg.from }:</h4> : '' }
+                  { !isMe(msg) ? <h4>({ msg.from.studentId }) { getFullName(msg.from) }:</h4> : '' }
                   <p>{ msg.content }</p>
                   <p style={{ textAlign: (isMe(msg) ? 'left' : 'right'), fontSize: '14px' }}>{ moment(parseInt(msg.dateTime)).fromNow() }</p>
                 </ChatBox>
