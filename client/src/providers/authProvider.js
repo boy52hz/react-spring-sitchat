@@ -76,7 +76,7 @@ const EVENTS = {
 
 const INITIAL_STATE = {
   isLoggedIn: AuthService.isLoggedIn(),
-  token: AuthService._token(),
+  token: AuthService.getToken(),
   username: '',
   email: '',
   password: '',

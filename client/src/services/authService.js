@@ -12,28 +12,28 @@ const AuthService = {
     if (!validateEmail(email)) throw Error(`${email} is not a valid email`)
   },
 
-  _username(username) {
-    if (typeof username !== 'undefined') {
+  setUsername(username) {
+    if (username) {
       sessionStorage.setItem('username', username)
-
-      return
     }
+  },
 
+  getUsername() {
     return sessionStorage.getItem('username')
   },
 
-  _token(token) {
-    if (typeof token !== 'undefined') {
+  setToken(token) {
+    if (token) {
       sessionStorage.setItem('token', token)
-
-      return
     }
+  },
 
+  getToken() {
     return sessionStorage.getItem('token')
   },
 
   isLoggedIn() {
-    const res = !!(this._username() && this._token())
+    const res = !!(this.getUsername() && this.getToken())
 
     return res
   },
@@ -90,8 +90,8 @@ const AuthService = {
         })
         .then(res => res.json())
         .then((data) => {
-          this._token(data.jwt)
-          this._username(data.username)
+          this.setToken(data.jwt)
+          this.setUsername(data.username)
 
           return true
         })
@@ -107,11 +107,11 @@ const AuthService = {
   },
 
   retrieveUser() {
-    return fetch(`${this._url}/user/${this._username()}`, {
+    return fetch(`${this._url}/user/${this.getUsername()}`, {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
-        authorization: `Bearer ${this._token()}`
+        authorization: `Bearer ${this.getToken()}`
       }
     })
     .then(res => {

@@ -24,7 +24,7 @@ const Broadcast = () => {
     if (!isChatLoaded) {
       onLoadChat()
     }
-  }, [onLoadChat, isChatLoaded])
+  }, [onLoadChat, isChatLoaded, token])
 
   const isMe = (msg) => (msg.from.split(' ')[0] === userData.firstName)
   const fullName = (userData ? userData.firstName + ' ' + userData.lastName : '')
@@ -68,14 +68,15 @@ const Broadcast = () => {
   return !userData ? <Fragment/> : (
     <StyledBroadcast>
       <SockJsClient
-        headers={{ Authorization: `Bearer ${token}` }}
+        headers={{ Authorization: `Bearer ${sessionStorage.getItem('token')}` }}
         url={ SOCKET_URL }
         topics={[ TOPIC_PATH ]}
         onConnect={ onConnected }
         onMessage={ msg => onMessageReceive(msg) }
         onConnectFailure={ onConnectFailure }
-        debug={ false }
+        debug={ true }
         ref={ client }
+        autoReconnect = { true }
       />
       <MainBox>
         <MainHeader>
