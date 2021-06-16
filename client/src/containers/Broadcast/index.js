@@ -20,11 +20,11 @@ const Broadcast = () => {
   const { chatHistory } = useChatState()
   const { onLoadChat, onMessageReceive } = useChatDispatch()
   const { onLogout, onLoadUserData } = useAuthDispatch()
-  const { userData, error } = useAuthState()
+  const { userData, error, token } = useAuthState()
 
   useEffect(() => {
     if (!userData) {
-      onLoadUserData();
+      onLoadUserData()
     }
     if (error === ERROR_TYPES.INVALID_TOKEN) {
       toast.error(error, {
@@ -32,10 +32,10 @@ const Broadcast = () => {
         autoClose: 5000,
         hideProgressBar: true,
       })
-      onLogout();
+      onLogout()
     }
-    onLoadChat();
-  }, [error, userData])
+    onLoadChat()
+  }, [error, userData, onLogout, onLoadChat, onLoadUserData])
 
   const isMe = userData ? (msg) => (msg.from.username === userData.username) : () => false;
   const getFullName = (data) => (data ? data.firstName + ' ' + data.lastName : '')
@@ -76,18 +76,17 @@ const Broadcast = () => {
     setClientMsg('')
   }
 
-  return !userData ? <Fragment/> : error ? <Redirect to={"/"}/> : (
+  return !userData ? <Fragment/> : error ? <Redirect to='/'/> : (
     <StyledBroadcast>
       <SockJsClient
-        headers={{ Authorization: `Bearer ${sessionStorage.getItem('token')}` }}
+        headers={{ Authorization: `Bearer ${token}` }}
         url={ SOCKET_URL }
         topics={[ TOPIC_PATH ]}
         onConnect={ onConnected }
         onMessage={ msg => onMessageReceive(msg) }
         onConnectFailure={ onConnectFailure }
-        debug={ true }
+        debug={ false }
         ref={ client }
-        autoReconnect = { true }
       />
       <MainBox>
         <MainHeader>
