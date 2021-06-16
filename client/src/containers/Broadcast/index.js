@@ -20,7 +20,7 @@ const Broadcast = () => {
   const { chatHistory } = useChatState()
   const { onLoadChat, onMessageReceive } = useChatDispatch()
   const { onLogout, onLoadUserData } = useAuthDispatch()
-  const { userData, error, token } = useAuthState()
+  const { userData, error } = useAuthState()
 
   useEffect(() => {
     if (!userData) {
@@ -60,7 +60,7 @@ const Broadcast = () => {
 
   const handleKeyPress = (e) => {
     if ((e.which === 13 || e.charCode === 13) && !e.shiftKey) {
-      onSubmit(e);      
+      onSubmit(e)
     }
   }
 
@@ -76,10 +76,10 @@ const Broadcast = () => {
     setClientMsg('')
   }
 
-  return !userData ? <Fragment/> : error ? <Redirect to='/'/> : (
+  return !userData ? <Fragment/> : error ? <Redirect to={"/"}/> : (
     <StyledBroadcast>
       <SockJsClient
-        headers={{ Authorization: `Bearer ${token}` }}
+        headers={{ Authorization: `Bearer ${sessionStorage.getItem('token')}` }}
         url={ SOCKET_URL }
         topics={[ TOPIC_PATH ]}
         onConnect={ onConnected }
