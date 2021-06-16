@@ -8,3 +8,6 @@ Client-side: JavaScript - ReactJs - SockJs STOMP
 
 #### Know issue
 * Bad practice of Form validation
+
+#### TODO
+* Feature: Online users
