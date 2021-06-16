@@ -1,2 +1,4 @@
 # Simple real-time chat via Websocket using React + Springboot
-ขี้เกียจทำ doc
+##Preview: https://react-spring-sitchat.herokuapp.com/
+
+Another one in progress
