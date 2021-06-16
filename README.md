@@ -3,7 +3,7 @@ Web Application สำหรับการ Chat ใน session ที่กำ�
 #### Preview: https://react-spring-sitchat.herokuapp.com/
 
 ### Development stack
-Server-side: Java - Spring boot framwork - Stomp Websocket - JWT
+Server-side: Java - Spring boot framwork - Stomp Websocket - JWT\
 Client-side: JavaScript - ReactJs - SockJs STOMP
 
 #### Know issue
