@@ -76,7 +76,7 @@ const Broadcast = () => {
     setClientMsg('')
   }
 
-  return (!userData && error) ? <Redirect to={"/"}/> : (
+  return !userData ? <Fragment/> : error ? <Redirect to={"/"}/> : (
     <StyledBroadcast>
       <SockJsClient
         headers={{ Authorization: `Bearer ${sessionStorage.getItem('token')}` }}
