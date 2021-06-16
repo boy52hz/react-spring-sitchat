@@ -2,6 +2,7 @@ package com.sitchat.server.controllers;
 
 import com.mongodb.MongoWriteException;
 import com.sitchat.server.models.User;
+import com.sitchat.server.models.dto.ErrorRespond;
 import com.sitchat.server.models.dto.authentication.AuthenticationRequest;
 import com.sitchat.server.models.dto.authentication.AuthenticationRespond;
 import com.sitchat.server.services.AuthenticationService;
@@ -9,7 +10,6 @@ import com.sitchat.server.services.imp.UserDetailsServiceImp;
 import com.sitchat.server.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,6 +32,7 @@ public class AuthenticationController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/register")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<?> register(@RequestBody User user) {
         Map<String, String> response = new HashMap<>();
         try {
@@ -56,7 +57,7 @@ public class AuthenticationController {
             final String jwt = jwtUtil.generateToken(authDetails);
             return ResponseEntity.status(HttpStatus.OK).body(new AuthenticationRespond(authDetails.getUsername(), jwt));
         } catch (BadCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRespond("Invalid username or password"));
         }
     }
 }

@@ -13,7 +13,7 @@ export const InputStyle = styled.input`
 
 	:focus {
 		outline: none;
-		border-bottom-color: ${({ invalid }) => invalid ? 'red' : 'rgba(0, 0, 0, 0.2)' };
+		border-bottom-color: ${({ invalid }) => invalid ? 'red' : 'var(--primary-color)' };
 		box-shadow: var(--inner-shadow);
 	}
 `

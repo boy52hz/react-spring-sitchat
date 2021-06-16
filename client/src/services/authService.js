@@ -5,7 +5,7 @@ const AuthService = {
 
   _validateStringField(field, value) {
     if (typeof value !== 'string' || !value.trim().length)
-      throw Error(`${field} is not valid`)
+      throw Error(`${field[0].toUpperCase()} is not valid`)
   },
 
   _validateEmail(email) {

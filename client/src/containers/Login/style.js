@@ -39,3 +39,9 @@ export const FormGroup = styled.form`
   justify-content: center;
   align-items: center;
 `
+
+export const ErrorMessage = styled.div`
+  font-weight: 500;
+  color: red;
+  margin: 10px 0;
+`

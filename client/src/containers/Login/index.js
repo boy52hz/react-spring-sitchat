@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { StyledLogin, FormGroup, MainBody } from './style.js'
+import { StyledLogin, FormGroup, MainBody, ErrorMessage } from './style.js'
 import Input  from '../../components/Input'
 import Button from '../../components/Button'
 
@@ -9,7 +9,8 @@ import { useAuthState, useAuthDispatch } from '../../providers/authProvider'
 
 const Login = () => {
   const { onUpdate, onLogin } = useAuthDispatch()
-  const { username, password } = useAuthState()
+  const { username, password, error } = useAuthState()
+  const invalidForm = (error ? error : '' )
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -20,10 +21,11 @@ const Login = () => {
     <StyledLogin>
       <MainBody>
         <h1>SIT CHAT</h1>
-        <FormGroup onSubmit={ onSubmit }>
+        <ErrorMessage>{ invalidForm }</ErrorMessage>
+        <FormGroup onSubmit={ onSubmit } autoComplete='off'>
           <div>
-            <Input name='username' value={ username || '' }type='text' placeholder='Username' onChange={ onUpdate }/>
-            <Input name='password' value={ password || '' }type='password' placeholder='Password' onChange={ onUpdate }/>
+            <Input name='username' value={ username || '' }type='text' placeholder='Username' onChange={ onUpdate } required/>
+            <Input name='password' value={ password || '' }type='password' placeholder='Password' onChange={ onUpdate } required/>
           </div>
           <Button type='submit'>Login</Button>
           <Link to='/register'>I don't have an account yet.</Link>
