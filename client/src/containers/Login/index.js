@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { StyledLogin, FormGroup, MainBody, ErrorMessage } from './style.js'
+import { BaseContainer, FormGroup, MainBody, ErrorMessage } from '../../globalStyles'
 import Input  from '../../components/Input'
 import Button from '../../components/Button'
 
@@ -18,7 +18,7 @@ const Login = () => {
   }
 
   return (
-    <StyledLogin>
+    <BaseContainer>
       <MainBody>
         <h1>SIT CHAT</h1>
         <ErrorMessage>{ invalidForm }</ErrorMessage>
@@ -31,7 +31,7 @@ const Login = () => {
           <Link to='/register'>I don't have an account yet.</Link>
         </FormGroup>
       </MainBody>
-    </StyledLogin>
+    </BaseContainer>
   )
 }
 

@@ -26,7 +26,7 @@ const Broadcast = () => {
     if (!userData) {
       onLoadUserData()
     }
-    if (error === ERROR_TYPES.INVALID_TOKEN) {
+    if (error) {
       toast.error(error, {
         position: 'top-right',
         autoClose: 5000,
@@ -76,7 +76,7 @@ const Broadcast = () => {
     setClientMsg('')
   }
 
-  return !userData ? <Fragment/> : error ? <Redirect to={"/"}/> : (
+  return !userData && <Fragment/> || error === ERROR_TYPES.INVALID_TOKEN && <Redirect to={"/"}/> || (
     <StyledBroadcast>
       <SockJsClient
         headers={{ Authorization: `Bearer ${sessionStorage.getItem('token')}` }}

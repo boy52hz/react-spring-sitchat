@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { Link } from 'react-router-dom'
 
-import { StyledRegister, FormGroup, MainBody } from './style.js'
+import { BaseContainer, FormGroup, MainBody, ErrorMessage } from '../../globalStyles'
 import Input  from '../../components/Input'
 import Button from '../../components/Button'
 
@@ -9,11 +9,12 @@ import { useAuthState, useAuthDispatch } from '../../providers/authProvider'
 
 const Register = () => {
   const { onUpdate, onRegister } = useAuthDispatch()
-  const { username, password, email } = useAuthState()
+  const { username, password, email, error } = useAuthState()
   const firstNameRef = useRef()
   const lastNameRef = useRef()
   const confirmPasswordRef = useRef()
   const studentIdRef = useRef()
+  const invalidForm = (error ? error : '' )
 
   const onSubmit = function(e) {
     e.preventDefault()
@@ -22,9 +23,10 @@ const Register = () => {
   }
 
   return (
-    <StyledRegister>
+    <BaseContainer>
       <MainBody>
         <h1>REGISTER</h1>
+        <ErrorMessage>{ invalidForm }</ErrorMessage>
         <FormGroup onSubmit={ onSubmit }>
           <div style={{marginBottom: "8px"}}>
             <Input name='username' value={ username || '' } type='text' placeholder='Username' onChange={ onUpdate } required/>
@@ -41,7 +43,7 @@ const Register = () => {
           <Link to='/login'>Already have an account? Login</Link>
         </FormGroup>
       </MainBody>
-    </StyledRegister>
+    </BaseContainer>
   )
 }
 
