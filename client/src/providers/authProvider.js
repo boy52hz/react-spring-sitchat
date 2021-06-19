@@ -77,9 +77,6 @@ const EVENTS = {
 const INITIAL_STATE = {
   isLoggedIn: AuthService.isLoggedIn(),
   token: AuthService.getToken(),
-  username: '',
-  email: '',
-  password: '',
   userData: undefined,
   error: ''
 }
@@ -98,11 +95,9 @@ const AuthProvider = ({ children }) => {
       dispatch({ type: EVENT_TYPES.UPDATE, payload: { name, value } })
     }
 
-    const handleRegister = (studentId, firstName, lastName) => {
-      const { username, email, password } = state
-
+    const handleRegister = (username, email, password, studentId, firstName, lastName) => {
       AuthService.register(username, email, password, studentId, firstName, lastName)
-        .then(() => handleLogin())
+        .then(() => handleLogin(username, password))
         .catch(({ message }) => {
           dispatch({
             type: EVENT_TYPES.ERROR,
@@ -111,8 +106,7 @@ const AuthProvider = ({ children }) => {
         })
     }
 
-    const handleLogin = () => {
-      const { username, password } = state
+    const handleLogin = (username, password) => {
       AuthService.login(username, password)
         .then(() => {
           dispatch({ type: EVENT_TYPES.LOGIN_SUCCESS })

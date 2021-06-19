@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { BaseContainer, FormGroup, MainBody, ErrorMessage } from '../../globalStyles'
@@ -8,36 +8,50 @@ import Button from '../../components/Button'
 import { useAuthState, useAuthDispatch } from '../../providers/authProvider'
 
 const Register = () => {
-  const { onUpdate, onRegister } = useAuthDispatch()
-  const { username, password, email, error } = useAuthState()
-  const firstNameRef = useRef()
-  const lastNameRef = useRef()
-  const confirmPasswordRef = useRef()
-  const studentIdRef = useRef()
-  const invalidForm = (error ? error : '' )
+  const { onRegister } = useAuthDispatch()
+  const { error } = useAuthState()
+  const [inputs, setInputs] = useState({
+    username: '',
+    password: '',
+    confirmPassword: '',
+    studentId: '',
+    firstName: '',
+    lastName: '',
+    email: ''
+  })
 
-  const onSubmit = function(e) {
+  const handleSubmit = (e) => {
     e.preventDefault()
-    if (confirmPasswordRef.current.value !== password) return
-    onRegister(studentIdRef.current.value, firstNameRef.current.value, lastNameRef.current.value)
+    if (inputs.confirmPassword !== inputs.password) return
+    onRegister(inputs.username, inputs.email, inputs.password, inputs.studentId, inputs.firstName, inputs.lastName)
+  }
+
+  const handleChange = (e) => {
+    setInputs(inputs => {
+      const { name, value } = e.target
+      return {
+        ...inputs,
+        [name]: value
+      }
+    })
   }
 
   return (
     <BaseContainer>
       <MainBody>
         <h1>REGISTER</h1>
-        <ErrorMessage>{ invalidForm }</ErrorMessage>
-        <FormGroup onSubmit={ onSubmit }>
+        {error && <ErrorMessage>{ error }</ErrorMessage>}
+        <FormGroup onSubmit={ handleSubmit }>
           <div style={{marginBottom: "8px"}}>
-            <Input name='username' value={ username || '' } type='text' placeholder='Username' onChange={ onUpdate } required/>
-            <Input name='password' value={ password || ''} type='password' placeholder='Password' onChange={ onUpdate } required/>
-            <Input name='confirmPassword' innerRef={confirmPasswordRef} type='password' placeholder='Confirm Password' required/>
+            <Input name='username' type='text' placeholder='Username' value={inputs.username} onChange={ handleChange } required/>
+            <Input name='password' type='password' placeholder='Password' value={inputs.password} onChange={ handleChange } required/>
+            <Input name='confirmPassword' type='password' placeholder='Confirm Password' value={inputs.confirmPassword} onChange={ handleChange } required/>
           </div>
           <div>
-            <Input name='firstName' innerRef={firstNameRef} type='text' placeholder='First Name' required/>
-            <Input name='lastName' innerRef={lastNameRef} type='text' placeholder='Last Name' required/>
-            <Input name='studentId' innerRef={studentIdRef} type='number' placeholder='Student ID' required/>
-            <Input name='email' value={ email || '' } type='email' placeholder='Email' onChange={ onUpdate } required/>
+            <Input name='firstName' type='text' placeholder='First Name' value={inputs.firstName} onChange={ handleChange } required/>
+            <Input name='lastName' type='text' placeholder='Last Name' value={inputs.lastName} onChange={ handleChange } required/>
+            <Input name='studentId' type='number' placeholder='Student ID' value={inputs.studentId} onChange={ handleChange } required/>
+            <Input name='email' type='email' placeholder='Email' value={inputs.email} onChange={ handleChange } required/>
           </div>
           <Button type='submit'>Register</Button>
           <Link to='/login'>Already have an account? Login</Link>
