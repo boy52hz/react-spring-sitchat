@@ -1,5 +1,6 @@
 package com.sitchat.server.controllers;
 
+import com.mongodb.MongoException;
 import com.mongodb.MongoWriteException;
 import com.sitchat.server.models.User;
 import com.sitchat.server.models.dto.ErrorRespond;
@@ -40,9 +41,9 @@ public class AuthenticationController {
             response.put("message", "User " + user.getUsername() + " has been created");
             return new ResponseEntity<>(response, HttpStatus.CREATED);
 
-        } catch (MongoWriteException ex) {
+        } catch (MongoException | org.springframework.dao.DuplicateKeyException ex) {
             response.put("message", "Failed to register an account");
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
     }
 
