@@ -8,7 +8,7 @@ import Button from '../../components/Button'
 import { useAuthState, useAuthDispatch } from '../../providers/authProvider'
 
 const Login = () => {
-  const { onLogin } = useAuthDispatch()
+  const { login } = useAuthDispatch()
   const { error } = useAuthState()
   const [inputs, setInputs] = useState({
     username: '',
@@ -17,7 +17,7 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onLogin(inputs.username, inputs.password)
+    login(inputs.username, inputs.password)
   }
 
   const handleChange = (e) => {

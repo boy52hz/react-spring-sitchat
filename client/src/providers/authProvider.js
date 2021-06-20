@@ -1,164 +1,148 @@
-import React, { createContext, useContext, useReducer } from 'react'
+import React, { createContext, useContext, useMemo, useReducer } from 'react'
 import AuthService from '../services/authService'
 
 const AuthState = createContext()
 const AuthDispatch = createContext()
 
-const EVENT_TYPES = {
-  UPDATE: 'update',
-  LOGIN_SUCCESS: 'login_success',
-  LOGIN_ERROR: 'login_error',
-  LOGOUT: 'logout',
-  USER_LOADED: 'user_loaded',
-  USER_LOAD_FAILED: 'user_load_failed',
-  CLEAR_ERRORS: 'clear_errors',
-  ERROR: 'error'
+const actions = {
+  LOGIN_SUCCESS: 'LOGGIN_SUCCESS',
+  LOGIN_FALURE: 'LOGIN_FAILURE',
+  LOGOUT: 'LOGOUT',
+  LOAD_USER_SUCCESS: 'LOAD_USER_SUCCESS',
+  LOAD_USER_FAILURE: 'LOAD_USER_FAILURE',
+  CLEAR_ERROR: 'CLEAR_ERROR',
+  REGISTER_FAILURE: 'REGISTER_FAILURE'
 }
 
-const EVENTS = {
-  [EVENT_TYPES.UPDATE]: (state, event) => {
-    const { name, value } = event.payload
-
-    return {
-      ...state,
-      [name]: value
-    }
-  },
-  [EVENT_TYPES.LOGIN_SUCCESS]: state => {
-    return {
-      ...state,
-      isLoggedIn: true
-    }
-  },
-  [EVENT_TYPES.USER_LOADED]: (state, event) => {
-    return {
-      ...state,
-      userData: event.payload.userData
-    }
-  },
-  [EVENT_TYPES.LOGIN_ERROR]: (state, event) => {
-    const { error } = event.payload
-    return {
-      ...state,
-      isLoggedIn: false,
-      error
-    }
-  },
-  [EVENT_TYPES.LOGOUT]: () => {
-    return {
-      name: '',
-      password: '',
-      error: '',
-      isLoggedIn: false
-    }
-  },
-  [EVENT_TYPES.ERROR]: (state, event) => {
-    const { error } = event.payload
-    return {
-        ...state,
-        error
-    }
-  },
-  [EVENT_TYPES.USER_LOAD_FAILED]: (state, event) => {
-    const { error } = event.payload
-    return {
-        ...state,
-        error
-    }
-  },
-  [EVENT_TYPES.CLEAR_ERRORS]: state => {
-    return {
-        ...state,
-        error: ''
-    }
-  }
-}
-
-const INITIAL_STATE = {
+const initialState = {
   isLoggedIn: AuthService.isLoggedIn(),
   token: AuthService.getToken(),
   userData: undefined,
   error: ''
 }
 
-const AuthReducer = (state, event) => {
-  return EVENTS[event.type](state, event) || state
+const authReducer = (state, action) => {
+  switch (action.type) {
+    case actions.LOGIN_SUCCESS: {
+      return {
+        ...state,
+        isLoggedIn: true
+      }
+    }
+    case actions.LOAD_USER_SUCCESS: {
+      const { userData } = action.payload
+      return {
+        ...state,
+        userData
+      }
+    }
+    case actions.LOGIN_FALURE: {
+      const { error } = action.payload
+      return {
+        ...state,
+        isLoggedIn: false,
+        error
+      }
+    }
+    case actions.LOGOUT: {
+      return {
+        name: '',
+        password: '',
+        error: '',
+        isLoggedIn: false
+      }
+    }
+    case actions.REGISTER_FAILURE: {
+      const { error } = action.payload
+      return {
+        ...state,
+        error
+      }
+    }
+    case actions.LOAD_USER_FAILURE: {
+      const { error } = action.payload
+      return {
+        ...state,
+        error
+      }
+    }
+    case actions.CLEAR_ERROR: {
+      return {
+        ...state,
+        error: ''
+      }
+    }
+    default: {
+      return state
+    }
+  }
 }
 
 const AuthProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE)
+  const [state, dispatch] = useReducer(authReducer, initialState)
 
-    const handleUpdate = event => {
-      const name = event.target.name
-      const value = event.target.value
-
-      dispatch({ type: EVENT_TYPES.UPDATE, payload: { name, value } })
-    }
-
-    const handleRegister = (username, email, password, studentId, firstName, lastName) => {
+  const helpers = useMemo(() => ({
+    register: (username, email, password, studentId, firstName, lastName) => {
       AuthService.register(username, email, password, studentId, firstName, lastName)
-        .then(() => handleLogin(username, password))
+        .then(() => {
+          this.login(username, password)
+        })
         .catch(({ message }) => {
           dispatch({
-            type: EVENT_TYPES.ERROR,
+            type: actions.REGISTER_FAILURE,
             payload: { error: message }
           })
         })
-    }
+    },
 
-    const handleLogin = (username, password) => {
+    login: (username, password) => {
       AuthService.login(username, password)
         .then(() => {
-          dispatch({ type: EVENT_TYPES.LOGIN_SUCCESS })
+          dispatch({ type: actions.LOGIN_SUCCESS })
         })
         .catch(({ message }) => {
           dispatch({
-            type: EVENT_TYPES.LOGIN_ERROR,
+            type: actions.LOGIN_FALURE,
+            payload: { error: message }
+          })
+        })
+    },
+
+    logout: () => {
+      AuthService.logout()
+        .then(() => {
+          dispatch({ type: actions.LOGOUT })
+        })
+    },
+
+    clearError: () => {
+      dispatch({ type: actions.CLEAR_ERROR })
+    },
+
+    loadUser: () => {
+      AuthService.retrieveUser()
+        .then((userData) => {
+          dispatch({
+            type: actions.LOAD_USER_SUCCESS,
+            payload: { userData }
+          })
+        })
+        .catch(({ message }) => {
+          dispatch({
+            type: actions.LOAD_USER_FAILURE,
             payload: { error: message }
           })
         })
     }
+  }), [])
 
-    const handleLogout = () => {
-      AuthService.logout().then(() => {
-        dispatch({ type: EVENT_TYPES.LOGOUT })
-      })
-    }
-
-    const handleClearErrors = () => {
-      dispatch({ type: EVENT_TYPES.CLEAR_ERRORS })
-    }
-
-    const handleUserDataLoading = () => {
-      AuthService.retrieveUser().then(userData => {
-        dispatch({ 
-          type: EVENT_TYPES.USER_LOADED,
-          payload: { userData }
-        })
-      }).catch(({ message }) => {
-        dispatch({ 
-          type: EVENT_TYPES.USER_LOAD_FAILED,
-          payload: { error: message }
-         })
-      })
-    }
-
-    const events = {
-      onUpdate: handleUpdate,
-      onRegister: handleRegister,
-      onLogin: handleLogin,
-      onLogout: handleLogout,
-      onLoadUserData: handleUserDataLoading,
-      onClearErrors: handleClearErrors
-    }
-
-    return (
-      <AuthState.Provider value={state}>
-        <AuthDispatch.Provider value={events}>
-          {children}
-        </AuthDispatch.Provider>
-      </AuthState.Provider>
-    )
+  return (
+    <AuthState.Provider value={state}>
+      <AuthDispatch.Provider value={helpers}>
+        {children}
+      </AuthDispatch.Provider>
+    </AuthState.Provider>
+  )
 }
 
 const useAuthState = () => {

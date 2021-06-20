@@ -8,7 +8,7 @@ import Button from '../../components/Button'
 import { useAuthState, useAuthDispatch } from '../../providers/authProvider'
 
 const Register = () => {
-  const { onRegister } = useAuthDispatch()
+  const { register } = useAuthDispatch()
   const { error } = useAuthState()
   const [inputs, setInputs] = useState({
     username: '',
@@ -23,7 +23,7 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (inputs.confirmPassword !== inputs.password) return
-    onRegister(inputs.username, inputs.email, inputs.password, inputs.studentId, inputs.firstName, inputs.lastName)
+    register(inputs.username, inputs.email, inputs.password, inputs.studentId, inputs.firstName, inputs.lastName)
   }
 
   const handleChange = (e) => {
