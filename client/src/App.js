@@ -11,24 +11,32 @@ import Login from './containers/Login'
 import Register from './containers/Register'
 
 import 'react-toastify/dist/ReactToastify.css'
+import { ERROR_TYPES } from './types'
 
 const App = () => {
-  const { onClearErrors, onLoadUserData } = useAuthDispatch()
+  const { onClearErrors, onLoadUserData, onLogout } = useAuthDispatch()
   const { error, isLoggedIn, userData } = useAuthState()
 
   const history = useHistory();
 
   useEffect(() => {
-    const unlisten = history.listen(() => {
+    const unlisten = history.listen((a) => {
       error && onClearErrors()
     })
+    return () => unlisten()
+  }, [history, error, onClearErrors])
 
+  useEffect(() => {
     if (isLoggedIn && !userData) {
       onLoadUserData()
     }
+  }, [isLoggedIn, onLoadUserData, userData])
 
-    return () => unlisten()
-  },[history, error, isLoggedIn, userData])
+  useEffect(() => {
+    if (error === ERROR_TYPES.INVALID_TOKEN) {
+      onLogout()
+    }
+  }, [error, onLogout])
 
   return (
     <StyledApp>

@@ -1,7 +1,10 @@
+import AuthService from "./authService";
+
 const ChatService = {
   _url: process.env.REACT_APP_API_URL || '',
-  loadChat(room, token) {
-    
+  
+  loadChat(room) {
+    const token = AuthService.getToken();
     return fetch(`${this._url}/history/${room}`, {
       method: 'GET',
       headers: {

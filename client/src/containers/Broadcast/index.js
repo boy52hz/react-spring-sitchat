@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, Fragment} from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import SockJsClient from 'react-stomp'
 import { toast } from 'react-toastify'
 import moment from 'moment'
@@ -8,8 +8,7 @@ import { StyledBroadcast, MainBody, MainBox, MainHeader, FormGroup, CustomLi, Ch
 import TextField from '../../components/TextField'
 import Button from '../../components/Button'
 import { useChatDispatch, useChatState } from '../../providers/chatProvider'
-import { Redirect } from 'react-router-dom'
-import { ERROR_TYPES } from '../../types';
+import AuthService from '../../services/authService'
 
 const SOCKET_URL = `${process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : window.location.origin}/ws`
 const TOPIC_PATH = '/topic/message/main'
@@ -19,23 +18,23 @@ const Broadcast = () => {
   const [clientMsg, setClientMsg] = useState('')
   const { chatHistory } = useChatState()
   const { onLoadChat, onMessageReceive } = useChatDispatch()
-  const { onLogout, onLoadUserData } = useAuthDispatch()
+  const { onLogout } = useAuthDispatch()
   const { userData, error } = useAuthState()
 
   useEffect(() => {
-    if (!userData) {
-      onLoadUserData()
-    }
+    onLoadChat("main");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     if (error) {
       toast.error(error, {
         position: 'top-right',
         autoClose: 5000,
         hideProgressBar: true,
-      })
-      onLogout()
+      });
     }
-    onLoadChat()
-  }, [error, userData, onLogout, onLoadChat, onLoadUserData])
+  }, [error])
 
   const isMe = userData ? (msg) => (msg.from.username === userData.username) : () => false;
   const getFullName = (data) => (data ? data.firstName + ' ' + data.lastName : '')
@@ -76,14 +75,14 @@ const Broadcast = () => {
     setClientMsg('')
   }
 
-  return !userData && <Fragment/> || error === ERROR_TYPES.INVALID_TOKEN && <Redirect to={"/"}/> || (
+  return (
     <StyledBroadcast>
       <SockJsClient
-        headers={{ Authorization: `Bearer ${sessionStorage.getItem('token')}` }}
+        headers={{ Authorization: `Bearer ${AuthService.getToken()}` }}
         url={ SOCKET_URL }
         topics={[ TOPIC_PATH ]}
         onConnect={ onConnected }
-        onMessage={ msg => onMessageReceive(msg) }
+        onMessage={ onMessageReceive }
         onConnectFailure={ onConnectFailure }
         debug={ false }
         ref={ client }
@@ -95,15 +94,17 @@ const Broadcast = () => {
         </MainHeader>
         <MainBody>
           <ul>
-            { chatHistory.map((msg, index, arr) => (
-              <CustomLi key={ msg.dateTime } isMe={ isMe(msg) } newGrouping={ index + 1 < arr.length && (moment(parseInt(msg.dateTime)) - moment(parseInt(arr[index + 1].dateTime))) > 1000 * 10 } >
-                <ChatBox isMe={ isMe(msg)} >
-                  { !isMe(msg) ? <h4>({ msg.from.studentId }) { getFullName(msg.from) }:</h4> : '' }
-                  <p>{ msg.content }</p>
-                  <p style={{ textAlign: (isMe(msg) ? 'left' : 'right'), fontSize: '14px' }}>{ moment(parseInt(msg.dateTime)).fromNow() }</p>
-                </ChatBox>
-              </CustomLi>
-            )) }
+            {userData && 
+              chatHistory.map((msg, index, arr) => (
+                <CustomLi key={ msg.dateTime } isMe={ isMe(msg) } newGrouping={ index + 1 < arr.length && (moment(parseInt(msg.dateTime)) - moment(parseInt(arr[index + 1].dateTime))) > 1000 * 10 } >
+                  <ChatBox isMe={ isMe(msg)} >
+                    { !isMe(msg) ? <h4>({ msg.from.studentId }) { getFullName(msg.from) }:</h4> : '' }
+                    <p>{ msg.content }</p>
+                    <p style={{ textAlign: (isMe(msg) ? 'left' : 'right'), fontSize: '14px' }}>{ moment(parseInt(msg.dateTime)).fromNow() }</p>
+                  </ChatBox>
+                </CustomLi>
+              ))
+            }
           </ul>
           <FormGroup onSubmit={ onSubmit }>
             <TextField cols='60' rows='5' placeholder='Enter your message' onChange={ handleChange } value={ clientMsg } onKeyPress={ handleKeyPress }></TextField>

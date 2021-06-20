@@ -46,18 +46,20 @@ const ChatReducer = (state, event) => {
 const ChatProvider = ({ children }) => {
   const [state, dispatch] = useReducer(ChatReducer, INITIAL_STATE)
 
-  const handleChatLoading = event => {
-    ChatService.loadChat('main', sessionStorage.getItem('token')).then(chatHistory => {
-      dispatch({ 
-        type: EVENT_TYPES.CHAT_LOADED,
-        payload: { chatHistory }
-       })
-    }).catch(({ message }) => {
-      dispatch({
-        type: EVENT_TYPES.CHAT_LOAD_FAILED,
-        payload: { error: message }
+  const handleChatLoading = (room) => {
+    ChatService.loadChat(room)
+      .then((chatHistory) => {
+        dispatch({
+          type: EVENT_TYPES.CHAT_LOADED,
+          payload: { chatHistory },
+        });
       })
-    })
+      .catch(({ message }) => {
+        dispatch({
+          type: EVENT_TYPES.CHAT_LOAD_FAILED,
+          payload: { error: message },
+        });
+      });
   }
 
   const handleMessageReceiving = msg => {
