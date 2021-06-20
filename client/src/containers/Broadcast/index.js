@@ -17,14 +17,13 @@ const Broadcast = () => {
   const client = useRef()
   const [clientMsg, setClientMsg] = useState('')
   const { chatHistory } = useChatState()
-  const { onLoadChat, onMessageReceive } = useChatDispatch()
-  const { onLogout } = useAuthDispatch()
+  const { loadChat, handleNewMessage } = useChatDispatch()
+  const { logout } = useAuthDispatch()
   const { userData, error } = useAuthState()
 
   useEffect(() => {
-    onLoadChat("main");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    loadChat("main");
+  }, [loadChat]);
 
   useEffect(() => {
     if (error) {
@@ -82,7 +81,7 @@ const Broadcast = () => {
         url={ SOCKET_URL }
         topics={[ TOPIC_PATH ]}
         onConnect={ onConnected }
-        onMessage={ onMessageReceive }
+        onMessage={ handleNewMessage }
         onConnectFailure={ onConnectFailure }
         debug={ false }
         ref={ client }
@@ -90,7 +89,7 @@ const Broadcast = () => {
       <MainBox>
         <MainHeader>
           <div style={{ flex: '10' }}>SIT CHAT - { getFullName(userData) }</div>
-          <Button style={{ flex: '1' }} onClick={ onLogout }>Logout</Button>
+          <Button style={{ flex: '1' }} onClick={ logout }>Logout</Button>
         </MainHeader>
         <MainBody>
           <ul>

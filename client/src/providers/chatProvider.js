@@ -1,13 +1,13 @@
-import { createContext, useContext, useReducer } from 'react'
+import { createContext, useContext, useMemo, useReducer } from 'react'
 import ChatService from '../services/chatService'
 
 const ChatState = createContext()
 const ChatDispatch = createContext()
 
-const EVENT_TYPES = {
-  CHAT_LOADED: 'chat_loaded',
-  CHAT_LOAD_FAILED: 'chat_load_failed',
-  MESSAGE_RECEIVED: 'message_received'
+const actions = {
+  LOAD_CHAT_SUCCESS: 'LOAD_CHAT_SUCCESS',
+  LOAD_CHAT_FAILURE: 'LOAD_CHAT_FAILURE',
+  RECEIVE_MESSAGE: 'RECEIVE_MESSAGE'
 }
 
 const INITIAL_STATE = {
@@ -15,68 +15,67 @@ const INITIAL_STATE = {
   isChatLoaded: false
 }
 
-const EVENTS = {
-
-  [EVENT_TYPES.CHAT_LOADED]: (state, event) => {
-    return {
-      ...state,
-      chatHistory: event.payload.chatHistory,
-      isChatLoaded: true
+const chatReducer = (state, action) => {
+  switch (action.type) {
+    case actions.LOAD_CHAT_SUCCESS: {
+      const { chatHistory } = action.payload
+      return {
+        ...state,
+        chatHistory,
+        isChatLoaded: true
+      }
     }
-  },
-  [EVENT_TYPES.CHAT_LOAD_FAILED]: (state, event) => {
-    const { error } = event.payload
-    return {
-      ...state,
-      error
+    case actions.LOAD_CHAT_FAILURE: {
+      const { error } = action.payload
+      return {
+        ...state,
+        error
+      }
     }
-  },
-  [EVENT_TYPES.MESSAGE_RECEIVED]: (state, event) => {
-    return {
-      ...state,
-      chatHistory: [event.payload, ...state.chatHistory]
+    case actions.RECEIVE_MESSAGE: {
+      const { newMessage } = action.payload
+      return {
+        ...state,
+        chatHistory: [newMessage, ...state.chatHistory]
+      }
+    }
+    default: {
+      return state
     }
   }
-}
-
-const ChatReducer = (state, event) => {
-  return EVENTS[event.type](state, event) || state
 }
 
 const ChatProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(ChatReducer, INITIAL_STATE)
+  const [state, dispatch] = useReducer(chatReducer, INITIAL_STATE)
 
-  const handleChatLoading = (room) => {
-    ChatService.loadChat(room)
-      .then((chatHistory) => {
-        dispatch({
-          type: EVENT_TYPES.CHAT_LOADED,
-          payload: { chatHistory },
-        });
+  const helpers = useMemo(() => ({
+    loadChat: (room) => {
+      ChatService.loadChat(room)
+        .then((chatHistory) => {
+          dispatch({
+            type: actions.LOAD_CHAT_SUCCESS,
+            payload: { chatHistory }
+          })
+        })
+        .catch(({ message }) => {
+          dispatch({
+            type: actions.LOAD_CHAT_FAILURE,
+            payload: { error: message }
+          })
+        })
+    },
+
+    handleNewMessage: (newMessage) => {
+      dispatch({
+        type: actions.RECEIVE_MESSAGE,
+        payload: { newMessage }
       })
-      .catch(({ message }) => {
-        dispatch({
-          type: EVENT_TYPES.CHAT_LOAD_FAILED,
-          payload: { error: message },
-        });
-      });
-  }
-
-  const handleMessageReceiving = msg => {
-    dispatch({
-      type: EVENT_TYPES.MESSAGE_RECEIVED,
-      payload: msg
-    })
-  }
-
-  const events = {
-    onLoadChat: handleChatLoading,
-    onMessageReceive: handleMessageReceiving
-  }
+    }
+  }), [])
 
   return (
     <ChatState.Provider value={state}>
-      <ChatDispatch.Provider value={events}>
+      <ChatDispatch.Provider value={helpers}>
         {children}
       </ChatDispatch.Provider>
     </ChatState.Provider>
