@@ -14,9 +14,9 @@ import java.security.Principal;
 public class MessagingController {
 
     private final ChatRoomTemporaryDataSource rooms;
-    private final String WS_USER_DIRECT = "/queue/direct";
-    private final String WS_TOPIC_MESSAGE = "/topic/message";
     private final SimpMessagingTemplate simpMessagingTemplate;
+    public static final String WS_TOPIC_MESSAGE = "/topic/message/";
+    public static final String WS_TOPIC_STATS_ONLINE = "/topic/stats/online/";
 
     public MessagingController(SimpMessagingTemplate simpMessagingTemplate, ChatRoomTemporaryDataSource rooms) {
         this.simpMessagingTemplate = simpMessagingTemplate;
@@ -27,7 +27,7 @@ public class MessagingController {
     public void sendMessage(@DestinationVariable String to, ChatMessage chatMessage) {
         chatMessage.setTo(to);
         rooms.addMessage(to, chatMessage);
-        simpMessagingTemplate.convertAndSend(WS_TOPIC_MESSAGE + "/" + to, chatMessage);
+        simpMessagingTemplate.convertAndSend(WS_TOPIC_MESSAGE + to, chatMessage);
     }
 
 //    @EventListener

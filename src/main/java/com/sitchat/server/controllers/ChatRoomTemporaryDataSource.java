@@ -3,7 +3,6 @@ package com.sitchat.server.controllers;
 import com.sitchat.server.websocket.ChatMessage;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 public class ChatRoomTemporaryDataSource {
 
@@ -26,4 +25,7 @@ public class ChatRoomTemporaryDataSource {
         return new ArrayDeque<>(get(room));
     }
 
+    public String[] getRooms() {
+        return rooms.keySet().toArray(new String[0]);
+    }
 }
