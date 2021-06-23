@@ -82,6 +82,7 @@ export const FormGroup = styled.form`
 export const MainBody = styled.div`
   background: white;
   padding: 2em;
+  padding-top: .8em;
   border-radius: 5px;
 
   textarea {
@@ -101,4 +102,13 @@ export const MainBody = styled.div`
   textarea:focus {
     outline: none;
   }
+`
+
+export const Stats = styled.div`
+  margin: .5em;
+  margin-right: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  color: #727272;
 `

@@ -4,19 +4,20 @@ import { toast } from 'react-toastify'
 import moment from 'moment'
 
 import { useAuthDispatch, useAuthState  } from '../../providers/authProvider'
-import { StyledBroadcast, MainBody, MainBox, MainHeader, FormGroup, CustomLi, ChatBox } from './style'
+import { StyledBroadcast, MainBody, MainBox, MainHeader, FormGroup, CustomLi, ChatBox, Stats } from './style'
 import TextField from '../../components/TextField'
 import Button from '../../components/Button'
 import { useChatDispatch, useChatState } from '../../providers/chatProvider'
 import AuthService from '../../services/authService'
 
 const SOCKET_URL = `${process.env.REACT_APP_API_URL ? process.env.REACT_APP_API_URL : window.location.origin}/ws`
-const TOPIC_PATH = '/topic/message/main'
+const TOPIC_MESSAGE_PATH = '/topic/message/main'
+const TOPIC_STATS_ONLINE_PATH = '/topic/stats/online/main'
 
 const Broadcast = () => {
   const client = useRef()
   const [clientMsg, setClientMsg] = useState('')
-  const { chatHistory } = useChatState()
+  const { chatHistory, stats } = useChatState()
   const { loadChat, handleNewMessage } = useChatDispatch()
   const { logout } = useAuthDispatch()
   const { userData, error } = useAuthState()
@@ -79,7 +80,7 @@ const Broadcast = () => {
       <SockJsClient
         headers={{ Authorization: `Bearer ${AuthService.getToken()}` }}
         url={ SOCKET_URL }
-        topics={[ TOPIC_PATH ]}
+        topics={[ TOPIC_MESSAGE_PATH, TOPIC_STATS_ONLINE_PATH ]}
         onConnect={ onConnected }
         onMessage={ handleNewMessage }
         onConnectFailure={ onConnectFailure }
@@ -92,6 +93,7 @@ const Broadcast = () => {
           <Button style={{ flex: '1' }} onClick={ logout }>Logout</Button>
         </MainHeader>
         <MainBody>
+          <Stats>ONLINE — {stats.online || 'Loading'}</Stats>
           <ul>
             {userData && 
               chatHistory.map((msg, index, arr) => (
@@ -106,7 +108,7 @@ const Broadcast = () => {
             }
           </ul>
           <FormGroup onSubmit={ onSubmit }>
-            <TextField cols='60' rows='5' placeholder='Enter your message' onChange={ handleChange } value={ clientMsg } onKeyPress={ handleKeyPress }></TextField>
+            <TextField cols='60' rows='5' placeholder='Enter your message' onChange={ handleChange } value={ clientMsg } onKeyPress={ handleKeyPress } />
             <Button type='submit'>Send</Button>
           </FormGroup>
         </MainBody>

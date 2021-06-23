@@ -7,12 +7,16 @@ const ChatDispatch = createContext()
 const actions = {
   LOAD_CHAT_SUCCESS: 'LOAD_CHAT_SUCCESS',
   LOAD_CHAT_FAILURE: 'LOAD_CHAT_FAILURE',
-  RECEIVE_MESSAGE: 'RECEIVE_MESSAGE'
+  RECEIVE_MESSAGE: 'RECEIVE_MESSAGE',
+  RECEIVE_STATS: 'RECEIVE_STATS',
 }
 
 const INITIAL_STATE = {
   chatHistory: [],
-  isChatLoaded: false
+  isChatLoaded: false,
+  stats: {
+    online: ''
+  }
 }
 
 const chatReducer = (state, action) => {
@@ -37,6 +41,16 @@ const chatReducer = (state, action) => {
       return {
         ...state,
         chatHistory: [newMessage, ...state.chatHistory]
+      }
+    }
+    case actions.RECEIVE_STATS: {
+      const { newStats } = action.payload
+      return {
+        ...state,
+        stats: {
+          ...state.stats,
+          ...newStats
+        }
       }
     }
     default: {
@@ -66,10 +80,18 @@ const ChatProvider = ({ children }) => {
     },
 
     handleNewMessage: (newMessage) => {
-      dispatch({
-        type: actions.RECEIVE_MESSAGE,
-        payload: { newMessage }
-      })
+      if (newMessage.stats) {
+        dispatch({
+          type: actions.RECEIVE_STATS,
+          payload: { newStats: newMessage.stats }
+        })
+      } else {
+        dispatch({
+          type: actions.RECEIVE_MESSAGE,
+          payload: { newMessage }
+        })
+      }
+      
     }
   }), [])
 
